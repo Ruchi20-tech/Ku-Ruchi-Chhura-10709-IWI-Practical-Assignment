@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Functions and Scope</title>
+</head>
+<body>
+
+<script>
+    // user-defined function
+    function showDetails() {
+
+        var name = "Ruchi";     // function scope
+        let age = 18;           // block scope
+        const college = "Rungta University"; // block scope
+
+        document.write("Name: " + name + "<br>");
+        document.write("Age: " + age + "<br>");
+        document.write("College: " + college + "<br>");
+    }
+
+    // function call (invocation)
+    showDetails();
+</script>
+
+</body>
+</html>

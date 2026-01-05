@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Conditionals and Loops</title>
+</head>
+<body>
+    <h1>JavaScript Conditionals and Loops Demo</h1>
+    
+    <script>
+        // Conditional Statements
+        document.write("--- IF STATEMENT ---"+"<br>");
+        let age = Number(prompt("Enter your age: "));
+        if (age >= 18) {
+            document.write("You are an adult"+"<br>");
+        } else {
+            document.write("You are a minor"+"<br>");
+        }
+        
+        // FOR LOOP
+        document.write("--- FOR LOOP ---"+"<br>");
+        for (let i = 1; i <= 5; i++) {
+            document.write("For loop iteration"+ i+"<br>");
+        }
+        
+        // WHILE LOOP
+        document.write("--- WHILE LOOP ---"+"<br>");
+        let count = 1;
+        while (count <= 5) {
+            document.write("While loop iteration: " + count+"<br>");
+            count++;
+        }
+        
+        // DO...WHILE LOOP
+        document.write("--- DO...WHILE LOOP ---"+"<br>");
+        let num = 1;
+        do {
+            document.write("Do...while loop iteration: " + num+"<br>");
+            num++;
+        } while (num <= 5);
+        
+        // IF...ELSE IF...ELSE
+        document.write("--- IF...ELSE IF...ELSE ---"+"<br>");
+        let score = Number(prompt("Enter your score: "));
+        if (score >= 90) {
+            document.write("Grade: A"+"<br>");
+        } else if (score >= 80) {
+            document.write("Grade: B"+"<br>");
+        } else if (score >= 70) {
+            document.write("Grade: C"+"<br>");
+        } else {
+            document.write("Grade: F"+"<br>");
+        }
+    </script>
+</body>
+</html>
