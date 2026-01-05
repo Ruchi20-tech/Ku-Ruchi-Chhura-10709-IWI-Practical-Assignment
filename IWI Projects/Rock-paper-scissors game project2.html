@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Rock Paper Scissors</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #64748b;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        /* Scoreboard Styling */
+        .scoreboard {
+            display: flex;
+            justify-content: space-around;
+            background: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .score-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .score-label {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .score-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        /* Choice Buttons */
+        .choices {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .choice-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .choice-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+
+        .choice-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Result Display */
+        .result-area {
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 12px;
+            transition: background 0.3s ease;
+        }
+
+        .result-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .win-glow { background-color: #f0fdf4; color: var(--success); }
+        .loss-glow { background-color: #fef2f2; color: var(--danger); }
+        .draw-glow { background-color: #fffbeb; color: var(--warning); }
+
+        /* Controls */
+        .controls {
+            margin-top: 1.5rem;
+        }
+
+        .reset-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .reset-btn:hover {
+            color: var(--danger);
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 400px) {
+            .choices { gap: 0.5rem; }
+            .choice-btn { width: 70px; height: 70px; font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Rock Paper Scissors</h1>
+        <p class="subtitle">First to 10 points wins!</p>
+
+        <div class="scoreboard">
+            <div class="score-box">
+                <span class="score-label">You</span>
+                <span id="user-score" class="score-value">0</span>
+            </div>
+            <div class="score-box">
+                <span class="score-label">CPU</span>
+                <span id="computer-score" class="score-value">0</span>
+            </div>
+        </div>
+
+        <div class="choices">
+            <button class="choice-btn" onclick="play('rock')" aria-label="Rock">✊</button>
+            <button class="choice-btn" onclick="play('paper')" aria-label="Paper">✋</button>
+            <button class="choice-btn" onclick="play('scissors')" aria-label="Scissors">✌️</button>
+        </div>
+
+        <div id="result-container" class="result-area">
+            <p id="result-message" class="result-text">Choose your weapon!</p>
+            <p id="comparison-text" class="comparison">Waiting for move...</p>
+        </div>
+
+        <div class="controls">
+            <button class="reset-btn" onclick="resetGame()">Reset Match</button>
+        </div>
+    </div>
+
+    <script>
+        // State variables
+        let userScore = 0;
+        let computerScore = 0;
+
+        const emojis = {
+            rock: '✊',
+            paper: '✋',
+            scissors: '✌️'
+        };
+
+        /**
+         * Core game logic
+         * @param {string} userChoice - The player's selection
+         */
+        function play(userChoice) {
+            const choices = ['rock', 'paper', 'scissors'];
+            const computerChoice = choices[Math.floor(Math.random() * 3)];
+            
+            const result = determineWinner(userChoice, computerChoice);
+            updateUI(result, userChoice, computerChoice);
+        }
+
+        /**
+         * Comparison logic
+         */
+        function determineWinner(user, cpu) {
+            if (user === cpu) return 'draw';
+            
+            if (
+                (user === 'rock' && cpu === 'scissors') ||
+                (user === 'paper' && cpu === 'rock') ||
+                (user === 'scissors' && cpu === 'paper')
+            ) {
+                userScore++;
+                return 'win';
+            } else {
+                computerScore++;
+                return 'loss';
+            }
+        }
+
+        /**
+         * Updates the DOM based on round results
+         */
+        function updateUI(result, user, cpu) {
+            const scoreUserEl = document.getElementById('user-score');
+            const scoreCpuEl = document.getElementById('computer-score');
+            const msgEl = document.getElementById('result-message');
+            const compEl = document.getElementById('comparison-text');
+            const container = document.getElementById('result-container');
+
+            // Update scores
+            scoreUserEl.innerText = userScore;
+            scoreCpuEl.innerText = computerScore;
+
+            // Set comparison text
+            compEl.innerHTML = `You ${emojis[user]} vs ${emojis[cpu]} CPU`;
+
+            // Reset classes
+            container.className = 'result-area';
+
+            // Handle results
+            switch(result) {
+                case 'win':
+                    msgEl.innerText = "You Won this round! 🎉";
+                    container.classList.add('win-glow');
+                    break;
+                case 'loss':
+                    msgEl.innerText = "Computer Won! 🤖";
+                    container.classList.add('loss-glow');
+                    break;
+                case 'draw':
+                    msgEl.innerText = "It's a Draw! 🤝";
+                    container.classList.add('draw-glow');
+                    break;
+            }
+
+            // Check for match winner
+            if (userScore >= 10 || computerScore >= 10) {
+                const finalWinner = userScore >= 10 ? "YOU" : "THE COMPUTER";
+                showFinalModal(finalWinner);
+            }
+        }
+
+        function showFinalModal(winner) {
+            // Using a simple styled text update instead of alert for better UX
+            const msgEl = document.getElementById('result-message');
+            msgEl.innerText = `MATCH OVER: ${winner} WINS!`;
+            
+            // Disable buttons temporarily
+            const btns = document.querySelectorAll('.choice-btn');
+            btns.forEach(b => b.disabled = true);
+            
+            setTimeout(() => {
+                resetGame();
+                btns.forEach(b => b.disabled = false);
+            }, 3000);
+        }
+
+        function resetGame() {
+            userScore = 0;
+            computerScore = 0;
+            document.getElementById('user-score').innerText = '0';
+            document.getElementById('computer-score').innerText = '0';
+            document.getElementById('result-message').innerText = 'Choose your weapon!';
+            document.getElementById('comparison-text').innerText = 'Waiting for move...';
+            document.getElementById('result-container').className = 'result-area';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>India Weather Explorer | Static Dashboard</title>
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --text-main: #ffffff;
+            /* Default background (Clear/Sunny) */
+            --bg-grad: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-grad);
+            color: var(--text-main);
+            transition: all 1.2s ease-in-out;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Weather Condition Themes */
+        body.sunny { --bg-grad: linear-gradient(135deg, #FFD700 0%, #FF8C00 100%); }
+        body.hazy { --bg-grad: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%); }
+        body.rainy { --bg-grad: linear-gradient(135deg, #4b6cb7 0%, #182848 100%); }
+        body.winter { --bg-grad: linear-gradient(135deg, #e6e9f0 0%, #eef1f5 100%); color: #333; }
+        body.winter .card { background: rgba(0, 0, 0, 0.05); color: #222; border-color: rgba(0,0,0,0.1); }
+        body.winter select { background: rgba(0, 0, 0, 0.1); color: #222; }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            z-index: 10;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .selection-box {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            appearance: none;
+        }
+
+        select option {
+            background: #2c3e50;
+            color: white;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            display: none; /* Hidden until city is selected */
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .weather-icon {
+            font-size: 5rem;
+            margin-bottom: 10px;
+        }
+
+        .temp {
+            font-size: 4.5rem;
+            font-weight: 800;
+        }
+
+        .condition {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 20px;
+        }
+
+        .stat-item span {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        .stat-item b {
+            font-size: 1.2rem;
+        }
+
+        .placeholder-text {
+            text-align: center;
+            opacity: 0.8;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="sunny">
+
+    <div class="container">
+        <div class="header">
+            <h1>India Weather</h1>
+            <p>Regional Forecast Simulation</p>
+        </div>
+
+        <div class="selection-box">
+            <select id="stateSelect">
+                <option value="">-- Select State --</option>
+            </select>
+            <select id="citySelect" disabled>
+                <option value="">-- Select City --</option>
+            </select>
+        </div>
+
+        <div id="weatherCard" class="card">
+            <div id="wIcon" class="weather-icon">☀️</div>
+            <div id="wCity" style="font-size: 1.8rem; font-weight: 600;">Mumbai</div>
+            <div class="temp"><span id="wTemp">32</span>°C</div>
+            <div id="wDesc" class="condition">Sunny Day</div>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <span>Humidity</span>
+                    <b id="wHum">45%</b>
+                </div>
+                <div class="stat-item">
+                    <span>Wind Speed</span>
+                    <b id="wWind">12 km/h</b>
+                </div>
+            </div>
+        </div>
+
+        <div id="placeholder" class="placeholder-text">
+            Select a state and city to view simulated weather.
+        </div>
+    </div>
+
+    <script>
+        // Static JSON mimicking an API response
+        const weatherDatabase = {
+            "Maharashtra": {
+                "Mumbai": { temp: 31, condition: "Sunny", humidity: "72%", wind: "14 km/h", theme: "sunny", icon: "☀️" },
+                "Pune": { temp: 24, condition: "Hazy", humidity: "40%", wind: "8 km/h", theme: "hazy", icon: "🌫️" },
+                "Nagpur": { temp: 42, condition: "Hot & Sunny", humidity: "15%", wind: "10 km/h", theme: "sunny", icon: "🔥" }
+            },
+            "Delhi": {
+                "New Delhi": { temp: 18, condition: "Winter Mist", humidity: "80%", wind: "5 km/h", theme: "winter", icon: "❄️" }
+            },
+            "Karnataka": {
+                "Bengaluru": { temp: 22, condition: "Rainy", humidity: "88%", wind: "15 km/h", theme: "rainy", icon: "🌧️" },
+                "Mysuru": { temp: 25, condition: "Cloudy", humidity: "65%", wind: "10 km/h", theme: "hazy", icon: "☁️" }
+            },
+            "West Bengal": {
+                "Kolkata": { temp: 33, condition: "Humid", humidity: "90%", wind: "20 km/h", theme: "hazy", icon: "☁️" },
+                "Darjeeling": { temp: 8, condition: "Cold/Winter", humidity: "85%", wind: "12 km/h", theme: "winter", icon: "🏔️" }
+            },
+            "Rajasthan": {
+                "Jaipur": { temp: 36, condition: "Sunny", humidity: "20%", wind: "12 km/h", theme: "sunny", icon: "☀️" },
+                "Udaipur": { temp: 30, condition: "Clear", humidity: "30%", wind: "7 km/h", theme: "sunny", icon: "🌤️" }
+            },
+            "Kerala": {
+                "Kochi": { temp: 28, condition: "Heavy Rain", humidity: "95%", wind: "25 km/h", theme: "rainy", icon: "⛈️" }
+            }
+        };
+
+        const stateSelect = document.getElementById('stateSelect');
+        const citySelect = document.getElementById('citySelect');
+        const weatherCard = document.getElementById('weatherCard');
+        const placeholder = document.getElementById('placeholder');
+
+        // Populate States
+        function initStates() {
+            Object.keys(weatherDatabase).sort().forEach(state => {
+                const opt = document.createElement('option');
+                opt.value = state;
+                opt.textContent = state;
+                stateSelect.appendChild(opt);
+            });
+        }
+
+        // Handle State Change
+        stateSelect.addEventListener('change', (e) => {
+            const state = e.target.value;
+            citySelect.innerHTML = '<option value="">-- Select City --</option>';
+            
+            if (state) {
+                citySelect.disabled = false;
+                Object.keys(weatherDatabase[state]).sort().forEach(city => {
+                    const opt = document.createElement('option');
+                    opt.value = city;
+                    opt.textContent = city;
+                    citySelect.appendChild(opt);
+                });
+            } else {
+                citySelect.disabled = true;
+                weatherCard.style.display = 'none';
+                placeholder.style.display = 'block';
+                document.body.className = 'sunny';
+            }
+        });
+
+        // Handle City Change
+        citySelect.addEventListener('change', (e) => {
+            const city = e.target.value;
+            const state = stateSelect.value;
+            
+            if (city && state) {
+                const data = weatherDatabase[state][city];
+                
+                // Update UI
+                document.getElementById('wCity').textContent = city;
+                document.getElementById('wTemp').textContent = data.temp;
+                document.getElementById('wDesc').textContent = data.condition;
+                document.getElementById('wHum').textContent = data.humidity;
+                document.getElementById('wWind').textContent = data.wind;
+                document.getElementById('wIcon').textContent = data.icon;
+                
+                // Update Background Theme
+                document.body.className = data.theme;
+                
+                // Show Card
+                placeholder.style.display = 'none';
+                weatherCard.style.display = 'block';
+            }
+        });
+
+        initStates();
+    </script>
+</body>
+</html>
