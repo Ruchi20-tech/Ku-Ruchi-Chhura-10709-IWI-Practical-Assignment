@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kosh | Indian Household Expense Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for real-time visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+        body { font-family: 'Outfit', sans-serif; background-color: #f0f4f8; }
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+    <div class="max-w-6xl mx-auto">
+        <!-- Brand Header -->
+        <header class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-indigo-900">Kosh <span class="text-indigo-500 text-lg">FinTrack</span></h1>
+                <p class="text-slate-500 font-medium">Monthly Household Accounts</p>
+            </div>
+            <div class="text-right hidden sm:block">
+                <p id="todayDate" class="text-slate-600 font-semibold"></p>
+                <p class="text-xs text-slate-400">Currency: Indian Rupee (₹)</p>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Left Panel: Input -->
+            <div class="lg:col-span-4 space-y-6">
+                <div class="bg-white p-6 rounded-3xl shadow-xl shadow-indigo-100/50 border border-slate-100">
+                    <h2 class="text-xl font-bold mb-6 text-slate-800 flex items-center gap-2">
+                        <span class="bg-indigo-100 p-2 rounded-lg text-indigo-600">➕</span> New Entry
+                    </h2>
+                    <form id="expenseForm" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Expense Description</label>
+                            <input type="text" id="desc" required placeholder="e.g., Weekly Mandi, Gas Cylinder" 
+                                class="w-full px-4 py-3 rounded-xl bg-slate-50 border-none focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Amount (₹)</label>
+                                <input type="number" id="amount" required step="1" placeholder="0"
+                                    class="w-full px-4 py-3 rounded-xl bg-slate-50 border-none focus:ring-2 focus:ring-indigo-500 outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Category</label>
+                                <select id="category" class="w-full px-4 py-3 rounded-xl bg-slate-50 border-none focus:ring-2 focus:ring-indigo-500 outline-none">
+                                    <option value="Groceries">🛒 Mandi/Groceries</option>
+                                    <option value="Bills">🔌 Rent/Bills</option>
+                                    <option value="Maid">🧹 Domestic Help</option>
+                                    <option value="Travel">🚗 Fuel/Travel</option>
+                                    <option value="Education">📚 School/Fees</option>
+                                    <option value="Dining">🍛 Eating Out</option>
+                                    <option value="Misc">📦 Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition-all active:scale-95">
+                            Add to Ledger
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Summary Snapshot -->
+                <div class="bg-indigo-900 p-8 rounded-3xl text-white shadow-2xl relative overflow-hidden">
+                    <div class="relative z-10">
+                        <p class="text-indigo-300 text-sm font-medium">Total Monthly Outflow</p>
+                        <h3 class="text-4xl font-bold mt-2" id="totalDisplay">₹0</h3>
+                    </div>
+                    <!-- Decorative circle -->
+                    <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-800 rounded-full opacity-50"></div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Analytics -->
+            <div class="lg:col-span-8 space-y-6">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Category Chart -->
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col items-center">
+                        <h2 class="text-lg font-bold mb-4 text-slate-800 self-start">Spending Breakdown</h2>
+                        <div class="w-full max-w-[250px]">
+                            <canvas id="spendingChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Top Spending Category -->
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
+                        <h2 class="text-lg font-bold mb-4 text-slate-800">Insights</h2>
+                        <div id="insightBox" class="space-y-4">
+                            <div class="p-4 bg-orange-50 rounded-2xl border border-orange-100">
+                                <p class="text-xs text-orange-600 font-bold uppercase">Highest Expense</p>
+                                <h4 id="topCategory" class="text-xl font-bold text-orange-900 mt-1">None</h4>
+                            </div>
+                            <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+                                <p class="text-xs text-emerald-600 font-bold uppercase">Daily Average</p>
+                                <h4 id="dailyAverage" class="text-xl font-bold text-emerald-900 mt-1">₹0</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction List -->
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="p-6 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
+                        <h2 class="text-lg font-bold text-slate-800">Recent Transactions</h2>
+                        <button onclick="clearAll()" class="text-xs font-bold text-red-500 hover:text-red-700 uppercase tracking-tighter">Clear All</button>
+                    </div>
+                    <div id="expenseList" class="divide-y divide-slate-100 max-h-[350px] overflow-y-auto custom-scrollbar">
+                        <div class="p-10 text-center text-slate-400">Your digital ledger is empty.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        let expenses = JSON.parse(localStorage.getItem('kosh_expenses')) || [];
+        let myChart = null;
+
+        // Configuration
+        const categoryMeta = {
+            'Groceries': { icon: '🛒', color: '#6366f1' },
+            'Bills': { icon: '🔌', color: '#f59e0b' },
+            'Maid': { icon: '🧹', color: '#ec4899' },
+            'Travel': { icon: '🚗', color: '#10b981' },
+            'Education': { icon: '📚', color: '#8b5cf6' },
+            'Dining': { icon: '🍛', color: '#ef4444' },
+            'Misc': { icon: '📦', color: '#64748b' }
+        };
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('todayDate').innerText = new Date().toLocaleDateString('en-IN', { 
+                day: 'numeric', month: 'long', year: 'numeric' 
+            });
+            initChart();
+            updateUI();
+        });
+
+        // Form Submission
+        document.getElementById('expenseForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const expense = {
+                id: Date.now(),
+                desc: document.getElementById('desc').value,
+                amount: parseInt(document.getElementById('amount').value),
+                category: document.getElementById('category').value,
+                timestamp: new Date().toISOString()
+            };
+
+            expenses.unshift(expense);
+            localStorage.setItem('kosh_expenses', JSON.stringify(expenses));
+            
+            e.target.reset();
+            updateUI();
+        });
+
+        function deleteExpense(id) {
+            expenses = expenses.filter(e => e.id !== id);
+            localStorage.setItem('kosh_expenses', JSON.stringify(expenses));
+            updateUI();
+        }
+
+        function clearAll() {
+            if(confirm("Are you sure you want to clear the ledger?")) {
+                expenses = [];
+                localStorage.removeItem('kosh_expenses');
+                updateUI();
+            }
+        }
+
+        function updateUI() {
+            renderList();
+            renderStats();
+            updateChart();
+        }
+
+        function renderList() {
+            const listContainer = document.getElementById('expenseList');
+            if (expenses.length === 0) {
+                listContainer.innerHTML = `<div class="p-10 text-center text-slate-400 italic">No entries found. Start by adding one!</div>`;
+                return;
+            }
+
+            listContainer.innerHTML = expenses.map(exp => `
+                <div class="p-5 flex items-center justify-between hover:bg-slate-50 transition-all group">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-xl">
+                            ${categoryMeta[exp.category]?.icon || '💰'}
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-800">${exp.desc}</p>
+                            <p class="text-xs text-slate-500 font-medium">${exp.category} • ${new Date(exp.timestamp).toLocaleDateString('en-IN')}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-6">
+                        <span class="text-lg font-bold text-slate-900">₹${exp.amount.toLocaleString('en-IN')}</span>
+                        <button onclick="deleteExpense(${exp.id})" class="text-slate-300 hover:text-red-500 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderStats() {
+            const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+            document.getElementById('totalDisplay').innerText = `₹${total.toLocaleString('en-IN')}`;
+            
+            // Calc Daily Average
+            const days = Math.max(1, new Set(expenses.map(e => new Date(e.timestamp).toDateString())).size);
+            document.getElementById('dailyAverage').innerText = `₹${Math.round(total/days).toLocaleString('en-IN')}`;
+
+            // Calc Top Category
+            const totals = {};
+            expenses.forEach(e => totals[e.category] = (totals[e.category] || 0) + e.amount);
+            
+            let top = "None";
+            let max = 0;
+            for(let cat in totals) {
+                if(totals[cat] > max) {
+                    max = totals[cat];
+                    top = cat;
+                }
+            }
+            document.getElementById('topCategory').innerText = total > 0 ? top : "None";
+        }
+
+        function initChart() {
+            const ctx = document.getElementById('spendingChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    plugins: { legend: { display: false } },
+                    cutout: '70%',
+                    responsive: true
+                }
+            });
+        }
+
+        function updateChart() {
+            const totals = {};
+            expenses.forEach(e => totals[e.category] = (totals[e.category] || 0) + e.amount);
+            
+            const labels = Object.keys(totals);
+            const data = Object.values(totals);
+            const colors = labels.map(l => categoryMeta[l].color);
+
+            myChart.data.labels = labels;
+            myChart.data.datasets[0].data = data;
+            myChart.data.datasets[0].backgroundColor = colors;
+            myChart.update();
+        }
+    </script>
+</body>
+</html>
