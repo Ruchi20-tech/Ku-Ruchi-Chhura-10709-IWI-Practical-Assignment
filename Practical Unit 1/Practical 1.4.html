@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registration Form</title>
+</head>
+<body>
+  <h2>Registration Form</h2>
+
+  <form action="#" method="post">
+    <p><b>Full name:</b><br>
+      <input type="text" name="fullname" placeholder="Your full name">
+    </p>
+
+    <p><b>Email:</b><br>
+      <input type="email" name="email" placeholder="you@example.com">
+    </p>
+
+    <p><b>Age:</b><br>
+      <input type="number" name="age" min="1" max="120">
+    </p>
+
+    <p><b>Gender:</b><br>
+      <input type="radio" name="gender" value="male"> Male<br>
+      <input type="radio" name="gender" value="female"> Female<br>
+      <input type="radio" name="gender" value="other"> Prefer not to say / Other
+    </p>
+
+    <p><b>Interests:</b><br>
+      <input type="checkbox" name="interest" value="webdev" checked> Web development<br>
+      <input type="checkbox" name="interest" value="ml"> Machine learning<br>
+      <input type="checkbox" name="interest" value="iot"> IoT<br>
+      <input type="checkbox" name="interest" value="other"> Other
+    </p>
+<p><b>Country:</b><br>
+      <select name="country">
+        <option value="">-- Select --</option>
+        <option value="india">India</option>
+        <option value="usa">USA</option>
+        <option value="uk">UK</option>
+        <option value="canada">Canada</option>
+        <option value="australia">Australia</option>
+      </select>
+    </p>
+
+    <p><b>Known languages (multiple):</b><br>
+      <select name="languages" multiple size="4">
+        <option value="english">English</option>
+        <option value="hindi">Hindi</option>
+        <option value="spanish">Spanish</option>
+        <option value="others">Others</option>
+      </select>
+    </p>
+
+    <p><b>Message / Notes:</b><br>
+      <textarea name="message" rows="3" cols="30" placeholder="Anything you want to tell us..."></textarea>
+    </p>
+<input type="submit" value="Submit">
+    <input type="reset" value="Reset">
+  </form>
+
+  <hr>
+  <p><i>Note: This page intentionally has no CSS. You can copy the HTML and open it in your browser to test the form.</i></p>
+</body>
+</html>
