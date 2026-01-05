@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ku Ruchi Chhura | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #020617;
+            color: #f8fafc;
+        }
+
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .project-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: #38bdf8;
+            box-shadow: 0 20px 25px -5px rgba(56, 189, 248, 0.1), 0 10px 10px -5px rgba(56, 189, 248, 0.04);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .skill-badge {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .skill-badge:hover {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: #38bdf8;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    </style>
+</head>
+<body class="selection:bg-sky-500/30">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 top-0 border-b border-white/5 glass">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+            <div class="text-2xl font-bold tracking-tight">
+                <span class="gradient-text">Ruchi.</span>
+            </div>
+            
+            <div class="hidden md:flex space-x-10 text-sm font-medium">
+                <a href="#home" class="hover:text-sky-400 transition">Home</a>
+                <a href="#about" class="hover:text-sky-400 transition">About</a>
+                <a href="#skills" class="hover:text-sky-400 transition">Skills</a>
+                <a href="#projects" class="hover:text-sky-400 transition">Projects</a>
+                <a href="#contact" class="hover:text-sky-400 transition">Contact</a>
+            </div>
+
+            <button class="md:hidden text-2xl" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 bg-[#020617] z-[60] flex flex-col items-center justify-center space-y-8 text-2xl font-bold transition-all duration-300 opacity-0 pointer-events-none">
+        <button onclick="toggleMenu()" class="absolute top-6 right-6"><i class="fas fa-times"></i></button>
+        <a href="#home" onclick="toggleMenu()">Home</a>
+        <a href="#about" onclick="toggleMenu()">About</a>
+        <a href="#skills" onclick="toggleMenu()">Skills</a>
+        <a href="#projects" onclick="toggleMenu()">Projects</a>
+        <a href="#contact" onclick="toggleMenu()">Contact</a>
+    </div>
+
+    <!-- Hero -->
+    <section id="home" class="min-h-screen pt-32 pb-20 px-6 flex items-center">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8 order-2 md:order-1">
+                <div class="inline-block px-4 py-1.5 rounded-full border border-sky-500/30 bg-sky-500/10 text-sky-400 text-sm font-medium">
+                    1st Year BCA Student
+                </div>
+                <h1 class="text-5xl md:text-7xl font-bold leading-[1.1]">
+                    Hi, I'm <br><span class="gradient-text">Ku Ruchi Chhura</span>
+                </h1>
+                <p class="text-slate-400 text-lg md:text-xl max-w-xl leading-relaxed">
+                    Building a bridge between logical coding and creative design. Enthusiastic about web development and graphic design.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#projects" class="px-8 py-4 bg-sky-500 hover:bg-sky-600 rounded-2xl font-bold transition shadow-lg shadow-sky-500/25">
+                        My Projects
+                    </a>
+                    <a href="mailto:ruchichhura315@gmail.com" class="px-8 py-4 glass border-white/10 hover:border-white/20 rounded-2xl font-bold transition">
+                        Get In Touch
+                    </a>
+                </div>
+            </div>
+            <div class="order-1 md:order-2 flex justify-center relative">
+                <div class="relative w-72 h-72 md:w-[400px] md:h-[400px]">
+                    <div class="absolute inset-0 border-2 border-sky-500/20 rounded-3xl rotate-6"></div>
+                    <div class="absolute inset-0 bg-slate-800 rounded-3xl -rotate-3 overflow-hidden shadow-2xl border border-white/10">
+                        <!-- Student Photo -->
+                        <img src="C:\Users\pc\Downloads\WhatsApp Image 2026-01-05 at 22.53.19.jpeg" alt="Ku Ruchi Chhura" class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-sky-500/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-24 px-6 bg-slate-900/30">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold mb-4">My <span class="text-sky-400">Skillset</span></h2>
+                <p class="text-slate-400">Technical foundations and creative expertise.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Development -->
+                <div class="glass p-8 rounded-3xl space-y-6">
+                    <div class="w-12 h-12 bg-sky-500/10 flex items-center justify-center rounded-xl text-sky-400">
+                        <i class="fas fa-laptop-code text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold">Web Dev</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge">HTML5</span>
+                        <span class="skill-badge">CSS3</span>
+                        <span class="skill-badge">JavaScript</span>
+                    </div>
+                </div>
+
+                <!-- Programming -->
+                <div class="glass p-8 rounded-3xl space-y-6">
+                    <div class="w-12 h-12 bg-indigo-500/10 flex items-center justify-center rounded-xl text-indigo-400">
+                        <i class="fas fa-terminal text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold">Programming</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge">C Language</span>
+                    </div>
+                </div>
+
+                <!-- Design -->
+                <div class="glass p-8 rounded-3xl space-y-6">
+                    <div class="w-12 h-12 bg-pink-500/10 flex items-center justify-center rounded-xl text-pink-400">
+                        <i class="fas fa-palette text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold">Graphic Design</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge">Canva</span>
+                        <span class="skill-badge">UI Layouts</span>
+                    </div>
+                </div>
+
+                <!-- Tools -->
+                <div class="glass p-8 rounded-3xl space-y-6">
+                    <div class="w-12 h-12 bg-emerald-500/10 flex items-center justify-center rounded-xl text-emerald-400">
+                        <i class="fas fa-tools text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold">Tools</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge">GitHub</span>
+                        <span class="skill-badge">Netlify</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 space-y-4">
+                <h2 class="text-4xl font-bold">Academic <span class="gradient-text">Showcase</span></h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">Projects built during my BCA first-year journey.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Project 1: Rock Paper Scissors -->
+                <div class="project-card glass rounded-[2.5rem] overflow-hidden flex flex-col p-4">
+                    <div class="h-64 bg-slate-800 rounded-[2rem] overflow-hidden mb-6 relative group">
+                        <img src="https://images.unsplash.com/photo-1596443686812-2f45229eebc3?auto=format&fit=crop&w=800&q=80" alt="Rock Paper Scissors" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-sky-500/20 group-hover:bg-transparent transition"></div>
+                    </div>
+                    <div class="px-4 pb-4">
+                        <h3 class="text-2xl font-bold mb-2">Rock Paper Scissors Game</h3>
+                        <p class="text-slate-400 mb-6 text-sm">Interactive game logic built with JavaScript. Part of IWI Practical Assignment.</p>
+                        <div class="flex flex-col gap-3">
+                            <a href="https://github.com/Ruchi20-tech/Ku-Ruchi-Chhura-10709-IWI-Practical-Assignment/blob/main/IWI%20Projects/Rock-paper-scissors%20game%20project2.html" target="_blank" class="w-full text-center py-3 bg-white/5 hover:bg-white/10 rounded-xl transition font-medium border border-white/10">
+                                <i class="fab fa-github mr-2"></i>View Repository
+                            </a>
+                            <a href="#" onclick="alert('Note: Local file paths cannot be opened directly from a hosted website for security. Please host this file on Netlify or GitHub Pages to view the live output.')" class="w-full text-center py-3 bg-sky-500 hover:bg-sky-600 rounded-xl transition font-bold shadow-lg shadow-sky-500/20">
+                                <i class="fas fa-external-link-alt mr-2"></i>View Output
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2: Weather Dashboard -->
+                <div class="project-card glass rounded-[2.5rem] overflow-hidden flex flex-col p-4">
+                    <div class="h-64 bg-slate-800 rounded-[2rem] overflow-hidden mb-6 relative group">
+                        <img src="https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?auto=format&fit=crop&w=800&q=80" alt="Weather Dashboard" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-indigo-500/20 group-hover:bg-transparent transition"></div>
+                    </div>
+                    <div class="px-4 pb-4">
+                        <h3 class="text-2xl font-bold mb-2">Weather Dashboard</h3>
+                        <p class="text-slate-400 mb-6 text-sm">Static weather tracker using JSON-like API concepts for data display.</p>
+                        <div class="flex flex-col gap-3">
+                            <a href="https://github.com/Ruchi20-tech/Ku-Ruchi-Chhura-10709-IWI-Practical-Assignment/blob/main/IWI%20Projects/Weather%20dashboard%20project%204.html" target="_blank" class="w-full text-center py-3 bg-white/5 hover:bg-white/10 rounded-xl transition font-medium border border-white/10">
+                                <i class="fab fa-github mr-2"></i>View Repository
+                            </a>
+                            <a href="#" onclick="alert('Please host your HTML file to view the live output.')" class="w-full text-center py-3 bg-sky-500 hover:bg-sky-600 rounded-xl transition font-bold shadow-lg shadow-sky-500/20">
+                                <i class="fas fa-external-link-alt mr-2"></i>View Output
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3: Expense Tracker -->
+                <div class="project-card glass rounded-[2.5rem] overflow-hidden flex flex-col p-4">
+                    <div class="h-64 bg-slate-800 rounded-[2rem] overflow-hidden mb-6 relative group">
+                        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=800&q=80" alt="Expense Tracker" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-emerald-500/20 group-hover:bg-transparent transition"></div>
+                    </div>
+                    <div class="px-4 pb-4">
+                        <h3 class="text-2xl font-bold mb-2">Expense Tracker</h3>
+                        <p class="text-slate-400 mb-6 text-sm">Financial management tool for adding and calculating expenses.</p>
+                        <div class="flex flex-col gap-3">
+                            <a href="https://github.com/Ruchi20-tech/Ku-Ruchi-Chhura-10709-IWI-Practical-Assignment/blob/main/IWI%20Projects/Expense%20tracker%20project1.html" target="_blank" class="w-full text-center py-3 bg-white/5 hover:bg-white/10 rounded-xl transition font-medium border border-white/10">
+                                <i class="fab fa-github mr-2"></i>View Repository
+                            </a>
+                            <a href="#" onclick="alert('Please host your HTML file to view the live output.')" class="w-full text-center py-3 bg-sky-500 hover:bg-sky-600 rounded-xl transition font-bold shadow-lg shadow-sky-500/20">
+                                <i class="fas fa-external-link-alt mr-2"></i>View Output
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4: Calculator -->
+                <div class="project-card glass rounded-[2.5rem] overflow-hidden flex flex-col p-4">
+                    <div class="h-64 bg-slate-800 rounded-[2rem] overflow-hidden mb-6 relative group">
+                        <img src="https://images.unsplash.com/photo-1587145820266-a5951ee6f677?auto=format&fit=crop&w=800&q=80" alt="Calculator App" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-pink-500/20 group-hover:bg-transparent transition"></div>
+                    </div>
+                    <div class="px-4 pb-4">
+                        <h3 class="text-2xl font-bold mb-2">Calculator Web App</h3>
+                        <p class="text-slate-400 mb-6 text-sm">A sleek calculator for basic arithmetic operations using HTML/CSS/JS.</p>
+                        <div class="flex flex-col gap-3">
+                            <a href="https://github.com/Ruchi20-tech/Ku-Ruchi-Chhura-10709-IWI-Practical-Assignment/blob/main/IWI%20Projects/calculator%20web%20app%20project3.html" target="_blank" class="w-full text-center py-3 bg-white/5 hover:bg-white/10 rounded-xl transition font-medium border border-white/10">
+                                <i class="fab fa-github mr-2"></i>View Repository
+                            </a>
+                            <a href="#" onclick="alert('Please host your HTML file to view the live output.')" class="w-full text-center py-3 bg-sky-500 hover:bg-sky-600 rounded-xl transition font-bold shadow-lg shadow-sky-500/20">
+                                <i class="fas fa-external-link-alt mr-2"></i>View Output
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="py-24 px-6 bg-slate-900/30">
+        <div class="max-w-3xl mx-auto glass p-10 md:p-16 rounded-[3rem] text-center">
+            <h2 class="text-4xl font-bold mb-6">Let's Connect</h2>
+            <p class="text-slate-400 mb-10 text-lg">I'm currently looking for internships and collaborations. Feel free to reach out!</p>
+            
+            <div class="flex justify-center space-x-6 mb-12">
+                <a href="https://www.linkedin.com/in/ku-ruchi-chhura-926082383" target="_blank" class="w-14 h-14 glass flex items-center justify-center rounded-2xl hover:text-sky-400 hover:border-sky-400 transition"><i class="fab fa-linkedin-in text-xl"></i></a>
+                <a href="https://github.com/Ruchi20-tech" target="_blank" class="w-14 h-14 glass flex items-center justify-center rounded-2xl hover:text-sky-400 hover:border-sky-400 transition"><i class="fab fa-github text-xl"></i></a>
+                <a href="mailto:ruchichhura315@gmail.com" class="w-14 h-14 glass flex items-center justify-center rounded-2xl hover:text-sky-400 hover:border-sky-400 transition"><i class="fas fa-envelope text-xl"></i></a>
+            </div>
+
+            <form action="https://formspree.io/f/your-form-id" method="POST" class="space-y-4 text-left">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <input type="text" name="name" placeholder="Your Name" required class="w-full bg-slate-800/50 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-sky-500 transition">
+                    <input type="email" name="email" placeholder="Your Email" required class="w-full bg-slate-800/50 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-sky-500 transition">
+                </div>
+                <textarea name="message" placeholder="Message" rows="4" required class="w-full bg-slate-800/50 border border-white/10 rounded-2xl px-6 py-4 focus:outline-none focus:border-sky-500 transition"></textarea>
+                <button type="submit" class="w-full py-4 bg-sky-500 hover:bg-sky-600 rounded-2xl font-bold transition">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 text-center text-slate-500 text-sm border-t border-white/5">
+        <p>&copy; 2024 Ku Ruchi Chhura. Designed with Passion.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('opacity-0')) {
+                menu.classList.remove('opacity-0', 'pointer-events-none');
+                menu.classList.add('opacity-100', 'pointer-events-auto');
+            } else {
+                menu.classList.add('opacity-0', 'pointer-events-none');
+                menu.classList.remove('opacity-100', 'pointer-events-auto');
+            }
+        }
+
+        // Active scroll listener
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 20) {
+                nav.classList.add('py-2');
+                nav.classList.remove('py-4');
+            } else {
+                nav.classList.add('py-4');
+                nav.classList.remove('py-2');
+            }
+        });
+    </script>
+</body>
+</html>
