@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Check Even Number</title>
+</head>
+
+<body>
+
+<script>
+    // Arrow function to check even number
+    const IsEven = (num) => {
+        return num % 2 === 0;
+    };
+
+    var n = prompt("Enter a number:");
+
+    if (IsEven(n)) {
+        document.write(n + " is an even number");
+    } else {
+        document.write(n + " is an odd number");
+    }
+</script>
+
+</body>
+</html>

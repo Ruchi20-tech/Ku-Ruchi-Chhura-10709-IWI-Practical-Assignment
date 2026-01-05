@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Box Model Visualizer</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f5f9;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        .legend {
+            margin: 15px 0;
+        }
+
+        .legend span {
+            display: inline-block;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        .content {
+            color: white;
+            background-color: #3b82f6;
+            padding: 30px 50px;
+        }
+
+        .padding {
+            background-color: #10b981;
+            padding: 20px;
+            display: inline-block;
+        }
+
+        .border {
+            border: 6px solid #f59e0b;
+            display: inline-block;
+        }
+
+        .margin {
+            margin: 30px;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Box Model Visualizer ✨</h1>
+
+    <div class="legend">
+        <span style="color:#3b82f6;">■ Content</span>
+        <span style="color:#10b981;">■ Padding</span>
+        <span style="color:#f59e0b;">■ Border</span>
+        <span style="border:2px dashed red; padding:3px;">Margin</span>
+    </div>
+
+    <!-- Box 1 -->
+    <div class="margin">
+        <div class="border">
+            <div class="padding">
+                <div class="content">Box 1</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Box 2 -->
+    <div class="margin">
+        <div class="border">
+            <div class="padding">
+                <div class="content">Box 2</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Remove Duplicates from Array</title>
+</head>
+
+<body>
+
+<script>
+    var n = Number(prompt("Enter number of elements:"));
+    var arr = [];
+    var unique = [];
+
+    for (var i = 0; i < n; i++) {
+        arr[i] = prompt("Enter element " + (i + 1) + ":");
+    }
+
+    for (var i = 0; i < arr.length; i++) {
+        if (unique.indexOf(arr[i]) == -1) {
+            unique.push(arr[i]);
+        }
+    }
+
+    document.write("Original Array: " + arr + "<br>");
+    document.write("Array after removing duplicates: " + unique);
+</script>
+
+</body>
+</html>
